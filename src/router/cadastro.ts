@@ -25,19 +25,27 @@ export async function createTrip(app: FastifyInstance){
             throw new Error("data invalida"); 
          }
 
-      if(dayjs(ends_at).isAfter(starts_at)){
+      if(dayjs(ends_at).isBefore(starts_at)){
          throw new Error("data invalida"); 
       }
 
-
+         
 
          const trip = await prisma.trip.create({
             data: {
                 destination,
                 starts_at,
                 ends_at,
+                participantes:{
+                    create: {
+                        name: owner_name,
+                        email: owner_email, 
+                    }
+                }
             }
          })
+
+      
         
          const mail = await getEmail()
 

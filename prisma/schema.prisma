@@ -8,13 +8,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model trip {
-  id String @id @default(uuid())
-  destination String
-  starts_at DateTime
-  ends_at DateTime
-  is_confirmed Boolean @default(false)
-  create_at DateTime @default(now())
+model Trip {
+id          String      @id @default(uuid())
+destination String
+starts_at   DateTime
+ends_at     DateTime
+is_confirmed Boolean   @default(false)
+create_at   DateTime     @default(now())
   
+  participantes Participantes[]
   @@map("trips")
+}
+
+model Participantes{
+  id  String @id  @default(uuid())
+   
+
+   name String?
+   email String
+   is_confirmed Boolean @default(false)
+   is_owner Boolean @default(false)
+
+   trip Trip @relation(fields: [trip_id], references: [id])
+   trip_id String
+
+
+  @@map("participantes")
 }
